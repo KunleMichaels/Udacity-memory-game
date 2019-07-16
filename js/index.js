@@ -125,7 +125,8 @@ function restartGame() {
 function openCard(e) {
     //when a card is clicked, it should show the icon 
     //increase the move of the card
-    startTimer();
+    startTimer(); 
+    increaseMove();
     let target = e.target;
    const parent = target.parentElement;
    if (parent.classList.contains('card')) {
@@ -137,7 +138,11 @@ if (!openedCards.includes(target)) {
     openedCards.push(target);
     checkMatchedCards();
 }
-    increaseMove();
+}
+
+function increaseTimer(){
+    timeTaken++;
+    setTime(timeTaken);
 }
 
 function startTimer() {
@@ -145,7 +150,7 @@ function startTimer() {
 
     if (!startGame) {
         startGame = true;
-        timer = setInterval(setTime, 1000);
+        timer = setInterval(increaseTimer, 1000);
     }
 }
 
@@ -156,14 +161,14 @@ function stopTimer() {
     clearInterval(timer);
 }
 
-function setTime() {
-    let secondsTime = ++timeTaken;
-    hour = parseInt(secondsTime / 3600);
-    timeHours.textContent = stringifyTime(hour);
-    minute = parseInt(secondsTime / 60);
-    timeMinutes.textContent = stringifyTime(minute);
-    second = parseInt(secondsTime % 60);
-    timeSeconds.textContent = stringifyTime(second);
+function setTime(timeTaken) {
+    let secondsTime = timeTaken;
+    hours = parseInt(secondsTime / 3600);
+    timeHours.textContent = stringifyTime(hours);
+    minutes = parseInt(secondsTime / 60);
+    timeMinutes.textContent = stringifyTime(minutes);
+    seconds = parseInt(secondsTime % 60);
+    timeSeconds.textContent = stringifyTime(seconds);
 }
 
 function stringifyTime(val) {
@@ -275,13 +280,12 @@ document.getElementsByClassName('matching-icons').disabled = true;
 
 function showModal() {
 
-    modalHours.textContent = hours > 0 ? `${hours} hours, ` : '';
+    modalHours.textContent = hours > 0 ? ( hours === 1 ? `${hours} hour, ` : `${hours} hours, `) : `${hours} hour, `;
     
-    modalMinutes.textContent = minutes > 0 ? `${minutes} minutes, ` : '';
-    modalSeconds.textContent = seconds;
+    modalMinutes.textContent = minutes > 0 ? ( minutes === 1 ? `${minutes} minute, ` : `${minutes} minutes, `) : `${minutes} minutes, `;
+    modalSeconds.textContent = `${seconds} seconds`;
     modalMoves.textContent = moves;
     modalRatings.textContent = rating;
-    console.log('secondas', seconds)
     modal.style.display = 'block';
 }
 
